@@ -9,6 +9,7 @@ var stream = require('stream');
 var figlet = require('figlet');
 var basicAuth = require('basic-auth-connect');
 var compress = require('compression');
+var stormpath = require('express-stormpath');
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
@@ -112,10 +113,19 @@ var proxy = httpProxy.createProxyServer({
 });
 
 var app = express();
-app.use(compress());
+
+//app.use(compress());
 if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
+app.use(stormpath.init(app, {
+    client: {
+      apiKey: {
+        id: argv.u,
+        secret: argv.a,
+      }
+    }
+  }));
 app.use(bodyParser.raw({limit: REQ_LIMIT, type: function() { return true; }}));
 app.use(getCredentials);
 app.use(function (req, res) {
