@@ -165,3 +165,4 @@ if(!argv.s) {
 
 console.log('AWS ES cluster available at http://' + BIND_ADDRESS + ':' + PORT);
 console.log('Kibana available at http://' + BIND_ADDRESS + ':' + PORT + '/_plugin/kibana/');
+
